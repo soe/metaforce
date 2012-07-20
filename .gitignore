@@ -1,0 +1,7 @@
+*.gem
+.bundle
+Gemfile.lock
+pkg/*
+deploy.zip
+retrieve.zip
+test.rb
