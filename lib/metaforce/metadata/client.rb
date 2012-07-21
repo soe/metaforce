@@ -20,8 +20,7 @@ module Metaforce
       #     :security_token => "security token"
       def initialize(options=nil)
         @session = Services::Client.new(options).session
-        @client = Savon::Client.new do
-          wsdl.document = "http://safe-journey-9052.herokuapp.com/wsdl/23.0/metadata.xml"
+        @client = Savon::Client.new "http://zippio.herokuapp.com/wsdl/23.0/metadata.xml" do |wsdl|
           wsdl.endpoint = @session[:metadata_server_url]
         end
         @client.http.auth.ssl.verify_mode = :none

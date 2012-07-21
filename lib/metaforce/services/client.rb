@@ -20,11 +20,9 @@ module Metaforce
           :password => Metaforce.configuration.password,
           :security_token => Metaforce.configuration.security_token
         } if @options.nil?
-        Metaforce.log(@options)
         @session = self.login(@options[:username], @options[:password], @options[:security_token])
-        Metaforce.log(@session)
-        @client = Savon::Client.new do
-          wsdl.document = "http://safe-journey-9052.herokuapp.com/wsdl/23.0/partner.xml"
+
+        @client = Savon::Client.new "http://zippio.herokuapp.com/wsdl/23.0/partner.xml" do |wsdl|
           wsdl.endpoint = @session[:services_url]
         end
         @client.http.auth.ssl.verify_mode = :none
@@ -33,8 +31,7 @@ module Metaforce
       # Performs a login and retrurns the session
       def login(username, password, security_token=nil)
         password = "#{password}#{security_token}" unless security_token.nil?
-        client = Savon::Client.new do
-          wsdl.document = "http://safe-journey-9052.herokuapp.com/wsdl/23.0/partner.xml"
+        client = Savon::Client.new "http://safe-journey-9052.herokuapp.com/wsdl/23.0/partner.xml" do |wsdl|
           wsdl.endpoint = wsdl.endpoint.to_s.sub(/login/, 'test') if Metaforce.configuration.test
           Metaforce.log("Logging in via #{wsdl.endpoint.to_s}")
         end
