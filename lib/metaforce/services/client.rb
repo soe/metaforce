@@ -20,8 +20,9 @@ module Metaforce
           :password => Metaforce.configuration.password,
           :security_token => Metaforce.configuration.security_token
         } if @options.nil?
+        Metaforce.log(@options)
         @session = self.login(@options[:username], @options[:password], @options[:security_token])
-
+        Metaforce.log(@session)
         @client = Savon::Client.new do
           wsdl.document = "http://safe-journey-9052.herokuapp.com/wsdl/23.0/partner.xml"
           wsdl.endpoint = @session[:services_url]
